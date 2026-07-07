@@ -1,0 +1,4 @@
+{
+  "testDataLocation": "src//helper//util//test-data//testData.csv",
+  "defaultTimeOut":  120000
+}
