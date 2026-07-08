@@ -31,3 +31,26 @@ Then('The cart page should contain product {string}', async function (productNam
     expect(found).toBe(true);
     fixture.subStepLogger.success(`Product verified in cart: ${productName}`);
 });
+ When('User updates the quantity of {string} to {string} on the cart page', async function (productName: string, quantity: string) {
+     const target = Number(quantity);
+     fixture.subStepLogger.info(`Adjusting quantity of ${productName} to ${target}`);
+     const current = await fixture.pages.sauceCartPage.getProductQuantityInCart(productName);
+     const clicksNeeded = target - current;
+     if (clicksNeeded > 0) {
+         // This theme has no cart-page quantity field — the only way to
+         // increase quantity is clicking "Add to Cart" again per unit.
+         await fixture.pages.sauceHomePage.increaseQuantityBy(productName, clicksNeeded);
+     } else {
+         fixture.subStepLogger.info(`Cart already at quantity ${current}; no increase needed (decreasing isn't supported by this UI).`);
+     }
+    fixture.subStepLogger.success(`Quantity adjustment complete for ${productName}`);
+ });
+
+
+Then('The cart page should show quantity {string} for product {string}', async function (quantity: string, productName: string) {
+    fixture.subStepLogger.info(`Verifying quantity of ${productName} is ${quantity}`);
+    const isCorrect = await fixture.pages.sauceCartPage.verifyQuantityIs(productName, quantity);
+    expect(isCorrect).toBe(true);
+    fixture.subStepLogger.success(`Quantity verified for ${productName}`);
+});
+
