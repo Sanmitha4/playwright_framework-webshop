@@ -23,7 +23,7 @@ module.exports = {
             "json:test-results/cucumber-report.json",
             "rerun:@rerun.txt"
         ],
-        parallel: 2
+        parallel: 1
     },
     rerun: {
         formatOptions: {
@@ -45,6 +45,6 @@ module.exports = {
             "json:test-results/cucumber-report.json",
             "rerun:@rerun.txt"
         ],
-        parallel: 2
+        parallel: 1
     }
 }
