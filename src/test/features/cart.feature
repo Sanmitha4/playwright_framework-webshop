@@ -1,7 +1,6 @@
 Feature: Shopping Cart
 
-@Key:Sauce_01 @smoke @sauce
-
+@smoke @sauce
   Scenario: Add a product to the cart successfully
 
     Given User navigates to the Sauce Demo home page
