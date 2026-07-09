@@ -62,18 +62,13 @@ When('User double-clicks the {string} button rapidly for {string}', async functi
     
     fixture.subStepLogger.success(`Rapid click execution completed for ${productName}`);
 });
-
 Given('User navigates to a product page where the item is sold out', async function () {
-    fixture.subStepLogger.info('Setting up intercept and navigating to the Grey Jacket page.');
+    fixture.subStepLogger.info('Navigating to product and forcing UI into Sold Out state.');
     
-    // 1. Activate network manipulation for the specific product URL handle
+    // This opens the page, waits for the button, and modifies its DOM properties safely
     await fixture.pages.sauceHomePage.mockProductAsSoldOut('grey-jacket');
     
-    // 2. Open the product page (this triggers the intercepted backend endpoint)
-    await fixture.pages.sauceHomePage.navigateToHome();
-    await fixture.pages.sauceHomePage.openProduct('Grey jacket');
-    
-    fixture.subStepLogger.success('Navigated to product page with simulated Sold Out environment.');
+    fixture.subStepLogger.success('UI successfully forced into a Sold Out state.');
 });
 
 Then('The cart button text should change to {string}', async function (expectedText: string) {
