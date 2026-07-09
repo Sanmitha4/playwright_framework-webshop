@@ -54,3 +54,43 @@ Then('The cart page should show quantity {string} for product {string}', async f
     fixture.subStepLogger.success(`Quantity verified for ${productName}`);
 });
 
+When('User double-clicks the {string} button rapidly for {string}', async function (buttonName: string, productName: string) {
+    fixture.subStepLogger.info(`Attempting rapid double-click abuse on the ${buttonName} button.`);
+    
+    // Call our newly created rapid click function
+    await fixture.pages.sauceHomePage.doubleClickAddToCartFor(productName);
+    
+    fixture.subStepLogger.success(`Rapid click execution completed for ${productName}`);
+});
+Given('User navigates to a product page where the item is sold out', async function () {
+    fixture.subStepLogger.info('Navigating to product and forcing UI into Sold Out state.');
+    
+    // This opens the page, waits for the button, and modifies its DOM properties safely
+    await fixture.pages.sauceHomePage.mockProductAsSoldOut('grey-jacket');
+    
+    fixture.subStepLogger.success('UI successfully forced into a Sold Out state.');
+});
+
+Then('The cart button text should change to {string}', async function (expectedText: string) {
+    fixture.subStepLogger.info(`Verifying button text shows: ${expectedText}`);
+    await fixture.pages.sauceHomePage.verifyAddToCartButtonState(expectedText, false);
+});
+
+Then('The {string} button should be disabled', async function (buttonText: string) {
+    fixture.subStepLogger.info(`Verifying that the "${buttonText}" button is completely disabled.`);
+    await fixture.pages.sauceHomePage.verifyAddToCartButtonState(buttonText, true);
+    fixture.subStepLogger.success(`Button state successfully verified as disabled.`);
+});
+
+When('User attempts to click the {string} button', async function (buttonText: string) {
+    fixture.subStepLogger.info(`Attempting to interact with the disabled "${buttonText}" button.`);
+    await fixture.pages.sauceHomePage.clickDisabledAddToCartButton(buttonText);
+});
+
+Then('The cart count should remain unchanged', async function () {
+    fixture.subStepLogger.info('Validating that the cart status did not alter.');
+    // Verifies the cart count text still says "0" (or matches your baseline)
+    const isCorrect = await fixture.pages.sauceHomePage.verifyCartCountIs("0"); 
+    expect(isCorrect).toBe(true);
+    fixture.subStepLogger.success('Cart count remained unchanged.');
+});

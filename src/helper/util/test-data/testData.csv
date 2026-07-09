@@ -1,1 +1,7 @@
-Key|Env|username|password|firstName|lastName|email|message
+Key|Env|ProductName|ExpectedStatus
+Catalog_01|STG||
+
+Catalog_02|STG||
+
+Catalog_03|STG||
+

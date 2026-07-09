@@ -1,0 +1,58 @@
+
+> play-ts-cucumber@1.0.0 test:all
+> cross-env ENV=STG npx ts-node src/helper/report/init.ts && cross-env ENV=STG cucumber-js --config=config/cucumber.js && cross-env ENV=STG npx ts-node src/helper/report/report.ts
+
+This Node.js version (v24.14.1) has not been tested with this version of Cucumber; it should work normally, but please raise an issue if you see anything unexpected.
+Cannot use 'progress-bar' formatter for output to 'stdout' as not a TTY. Switching to 'progress' formatter.
+process.env.ENV is STG
+✅ Browser launched for all tests.
+..F--...F--.🧹 Browser closed after all scenarios.
+
+
+Failures:
+
+1) Scenario: Add a product to the cart successfully # src/test/features/cart.feature:4
+   ✔ Before # src/support/hooks.ts:33
+   ✔ Given User navigates to the Sauce Demo home page # src/test/steps/cartSteps.ts:8
+       Attachment (text/html)
+       Attachment (text/html)
+       Attachment (text/html)
+   ✖ When User adds product "Grey jacket" to the cart # src/test/steps/cartSteps.ts:13
+       Attachment (text/html)
+       Attachment (text/html)
+       Attachment (image/png)
+       locator.waitFor: Timeout 30000ms exceeded.
+       =========================== logs ===========================
+       waiting for getByRole('button', { name: /add to cart/i }) to be visible
+       ============================================================
+           at SauceHomePage.addOpenedProductToCart (/mnt/c/Users/Sanmitha/CodeCraft/Webshop/playwright_framework-webshop/src/pages/sauceHomePage.ts:29:28)
+           at SauceHomePage.addProductToCartByName (/mnt/c/Users/Sanmitha/CodeCraft/Webshop/playwright_framework-webshop/src/pages/sauceHomePage.ts:50:20)
+           at World.<anonymous> (/mnt/c/Users/Sanmitha/CodeCraft/Webshop/playwright_framework-webshop/src/test/steps/cartSteps.ts:15:5)
+   - Then The cart count should be "1" # src/test/steps/cartSteps.ts:18
+   - And The cart page should contain product "Grey jacket" # src/test/steps/cartSteps.ts:24
+   ✔ After # src/support/hooks.ts:141
+
+2) Scenario: Update product quantity in the cart # src/test/features/cart.feature:13
+   ✔ Before # src/support/hooks.ts:33
+   ✔ Given User navigates to the Sauce Demo home page # src/test/steps/cartSteps.ts:8
+       Attachment (text/html)
+       Attachment (text/html)
+       Attachment (text/html)
+   ✖ When User adds product "Grey jacket" to the cart # src/test/steps/cartSteps.ts:13
+       Attachment (text/html)
+       Attachment (text/html)
+       Attachment (image/png)
+       locator.waitFor: Timeout 30000ms exceeded.
+       =========================== logs ===========================
+       waiting for getByRole('button', { name: /add to cart/i }) to be visible
+       ============================================================
+           at SauceHomePage.addOpenedProductToCart (/mnt/c/Users/Sanmitha/CodeCraft/Webshop/playwright_framework-webshop/src/pages/sauceHomePage.ts:29:28)
+           at SauceHomePage.addProductToCartByName (/mnt/c/Users/Sanmitha/CodeCraft/Webshop/playwright_framework-webshop/src/pages/sauceHomePage.ts:50:20)
+           at World.<anonymous> (/mnt/c/Users/Sanmitha/CodeCraft/Webshop/playwright_framework-webshop/src/test/steps/cartSteps.ts:15:5)
+   - And User updates the quantity of "Grey jacket" to "3" on the cart page # src/test/steps/cartSteps.ts:31
+   - Then The cart page should show quantity "3" for product "Grey jacket" # src/test/steps/cartSteps.ts:46
+   ✔ After # src/support/hooks.ts:141
+
+2 scenarios (2 failed)
+8 steps (2 failed, 4 skipped, 2 passed)
+1m41.055s (executing steps: 1m11.317s)

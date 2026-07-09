@@ -75,4 +75,59 @@ export default class SauceHomePage {
         }
         this.logger.success(`Clicked Add to Cart ${times} additional time(s) for ${productName}`);
     }
+    async doubleClickAddToCartFor(productName: string) {
+    // 1. Navigate to the product detail page first
+    await this.openProduct(productName);
+
+    // 2. Locate the button
+    const addToCartBtn = this.page.getByRole(this.Elements.addToCartButton.role, { 
+        name: this.Elements.addToCartButton.name 
+    });
+    await addToCartBtn.waitFor({ state: "visible" });
+
+    this.logger.info(`Simulating rapid double-click on Add to Cart for: ${productName}`);
+
+    // 3. Execute an explicit double-click without waiting for AJAX intervals
+    await addToCartBtn.click({ clickCount: 2, delay: 50 }); 
+    
+    // Settle buffer for network requests to complete/fail
+    await this.page.waitForTimeout(1000);
+}
+async mockProductAsSoldOut(productUrlHandle: string) {
+    this.logger.info(`Intercepting network to mock product '${productUrlHandle}' as sold out.`);
+    
+    // Intercept Shopify's background data request before navigating
+    await this.page.route(`**/products/${productUrlHandle}.js`, async (route) => {
+        const response = await route.fetch();
+        const json = await response.json();
+        
+        // Force the main availability and all variant states to false
+        json.available = false;
+        if (json.variants) {
+            json.variants.forEach((variant: any) => variant.available = false);
+        }
+        
+        await route.fulfill({ json });
+    });
+}
+
+async verifyAddToCartButtonState(expectedText: string, shouldBeDisabled: boolean) {
+    const button = this.page.getByRole('button', { name: new RegExp(expectedText, 'i') });
+    await button.waitFor({ state: "visible" });
+    
+    if (shouldBeDisabled) {
+        await expect(button).toBeDisabled();
+        this.logger.success(`Verified that the button is disabled and displays: "${expectedText}"`);
+    } else {
+        await expect(button).toBeEnabled();
+        this.logger.success(`Verified that the button is enabled and displays: "${expectedText}"`);
+    }
+}
+
+async clickDisabledAddToCartButton(expectedText: string) {
+    const button = this.page.getByRole('button', { name: new RegExp(expectedText, 'i') });
+    // Bypasses normal Playwright actionability checks to force a click on a disabled button
+    await button.click({ force: true });
+    this.logger.info(`Forced a click action on the disabled "${expectedText}" button.`);
+}
 }
