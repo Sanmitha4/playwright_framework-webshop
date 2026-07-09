@@ -1,2 +1,3 @@
-Key|Env|ProductName|ExpectedStatus
-Login_01|STG||
+Key|Env|ProductName|ExpectedStatus|Username|Password
+Login_01|STG|||invalid_user@test.com|WrongPass123
+Login_02|STG|||not-an-email|SomePassword1
