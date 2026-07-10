@@ -25,3 +25,16 @@ Feature: Product Search
     Given User navigates to the Sauce Demo home page
     When User searches for product "averylongstringoftextthatgoesonforhundredsofcharactersandexceedsstandardinputlimitations..."
     Then The search results page should display no results found
+
+
+@Key:Search_05 @regression @sauce @smoke
+  Scenario Outline: Verify search engine is case insensitive
+    Given User navigates to the Sauce Demo home page
+    When User searches for product "<searchQuery>"
+    Then The search results should include a product containing "jacket"
+
+    Examples:
+      | searchQuery |
+      | JACKET      |
+      | Jacket      |
+      | jaCKeT      |
