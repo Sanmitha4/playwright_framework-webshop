@@ -21,6 +21,13 @@ Feature: User Login Authentication
     Then An error message should be displayed on the login page
 
 
+@Key:Login_04  @sanity @sauce
+  Scenario:Navigate to the "Create Account" page with login
+    Given User navigates to the Sauce Demo login page
+    When User clicks on the "Create Account" link
+    Then The account registration page should be displayed
+
+
 
 
 

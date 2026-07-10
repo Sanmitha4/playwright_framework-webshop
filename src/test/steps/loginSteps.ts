@@ -31,3 +31,14 @@ Then('User should remain on the login page', async function () {
     await fixture.pages.sauceLoginPage.verifyUserStillOnLoginPage();
     fixture.subStepLogger.success('Negative authentication verification complete.');
 });
+
+// Changing the hardcoded string to a dynamic parameter {string}
+When('User clicks on the {string} link', async function (linkName: string) {
+    fixture.subStepLogger.info(`Triggering navigation for dynamic interface text link: ${linkName}`);
+    await fixture.pages.sauceLoginPage.clickCreateAccountLink(linkName);
+});
+
+Then('The account registration page should be displayed', async function () {
+    fixture.subStepLogger.info('Verifying navigation to registration layout state.');
+    await fixture.pages.sauceLoginPage.verifyOnRegistrationPage();
+});

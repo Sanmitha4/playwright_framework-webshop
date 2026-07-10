@@ -16,7 +16,9 @@ export default class SauceLoginPage {
     passwordInput: "form#customer_login input[type='password'], #CustomerPassword",
     // Make sure we click the submit button inside the login form specifically
     signInButton: "form#customer_login input[type='submit'], form#customer_login .btn",
-    errorBanner: ".errors, .alert--error, form#customer_login .errors"
+    errorBanner: ".errors, .alert--error, form#customer_login .errors",
+    createAccountLink:"a[href*='/account/register'], text=Create account",
+    registerUrlPath:"/account/register"
 };    
 
    async navigateToLoginPage() {
@@ -75,4 +77,36 @@ async verifyErrorMessageIsDisplayed() {
     expect(isRejected).toBe(true);
 }
 
+async clickCreateAccountLink(linkName: string) {
+    this.logger.info(`Locating link based on framework context parameter: "${linkName}"`);
+    
+    // 1. Target by explicit URL paths or fallback to text properties natively
+    const registerLink = this.page.locator(
+        `a[href*='/account/register'], 
+         a:has-text("Sign up"), 
+         a:has-text("${linkName}")`
+    ).first();
+    
+    await registerLink.waitFor({ state: "visible", timeout: 5000 });
+    await registerLink.click();
+    await this.page.waitForLoadState("load");
+}    
+
+async verifyOnRegistrationPage() {
+    const currentUrl = this.page.url();
+    this.logger.info(`Validating browser location URL boundaries: ${currentUrl}`);
+    
+    // 1. Assert that the URL successfully routed to the registration page path
+    expect(currentUrl).toContain(this.Elements.registerUrlPath);
+    
+    // 2. Assert that the page title contains 'Create' or 'Register' or 'Account'
+    const pageTitle = await this.page.title();
+    this.logger.info(`Captured page title: "${pageTitle}"`);
+    
+    // Cleans up the compilation error by using a valid standard Playwright matcher
+    expect(pageTitle).toBeTruthy(); 
+    expect(pageTitle.toLowerCase()).toMatch(/create|register|account/);
+    
+    this.logger.success(`Registration page verified successfully via path and title validation.`);
+}
 }
