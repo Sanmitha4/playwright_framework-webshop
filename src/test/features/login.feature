@@ -14,4 +14,13 @@ Feature: User Login Authentication
     When User attempts to login with email "not-an-email" and password "SomePassword1"
     Then An error message should be displayed on the login page
 
+@Key:Login_03 @regression @sauce @negative 
+  Scenario:Login fails with empty credentials
+    Given User navigates to the Sauce Demo Login page
+    When User attempts to login with credentials from test data
+    Then an error message should be displayed on the login page
+
+
+    
+
 

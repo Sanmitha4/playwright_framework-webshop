@@ -1,3 +1,4 @@
 Key|Env|ProductName|ExpectedStatus|Username|Password
 Login_01|STG|||invalid_user@test.com|WrongPass123
 Login_02|STG|||not-an-email|SomePassword1
+Login_03|STG||||
