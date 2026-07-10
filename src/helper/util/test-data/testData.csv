@@ -1,1 +1,6 @@
-Key|Env|username|password|firstName|lastName|email|message
+Key|Env|ProductName|ExpectedStatus|Username|Password
+Search_01|STG||||
+Search_02|STG||||
+Search_03|STG||||
+Search_04|STG||||
+Search_05|STG||||
