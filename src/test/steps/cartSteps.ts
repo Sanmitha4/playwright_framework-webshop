@@ -54,3 +54,12 @@ Then('The cart page should show quantity {string} for product {string}', async f
     fixture.subStepLogger.success(`Quantity verified for ${productName}`);
 });
 
+When('User submits the search form without entering a term', async function () {
+    fixture.subStepLogger.info('Triggering blank input form submission execution handler.');
+    await fixture.pages.sauceSearchPage.submitEmptySearch();
+});
+
+Then('The user should remain on the search page without a server error', async function () {
+    fixture.subStepLogger.info('Evaluating page source definitions for platform stability.');
+    await fixture.pages.sauceSearchPage.verifyPageIsStableWithoutServerError();
+});

@@ -81,5 +81,34 @@ async verifyResultsContainKeyword(keyword: string) {
     }
 }
 
+async submitEmptySearch() {
+    this.logger.info("Clearing search input field and executing blank submission.");
+    
+    const searchInput = this.page.locator(this.Elements.searchBarInput).first();
+    await searchInput.waitFor({ state: "visible", timeout: 5000 });
+    
+    // Clear out any placeholder defaults, then hit Enter
+    await searchInput.fill("");
+    await searchInput.press("Enter");
+    
+    await this.page.waitForLoadState("load");
+}
+
+async verifyPageIsStableWithoutServerError() {
+    const currentUrl = this.page.url();
+    const pageTitle = await this.page.title();
+    this.logger.info(`Analyzing stability constraints. Title: "${pageTitle}", URL: ${currentUrl}`);
+
+    // 1. Ensure the page hasn't crashed into a 500 error, 404 broken link, or nginx error screen
+    const errorPageRegex = /internal server error|500|404|not found|error page|broken/i;
+    expect(pageTitle).not.toMatch(errorPageRegex);
+    
+    // 2. Double check the visible body text to confirm a system dump didn't bleed onto the page
+    const visibleBodyText = await this.page.locator("body").innerText();
+    expect(visibleBodyText).not.toContain("Exception");
+    expect(visibleBodyText).not.toContain("Stack Trace");
+    
+    this.logger.success("Application safety verification complete. Zero server exceptions encountered.");
+}
     
 }
