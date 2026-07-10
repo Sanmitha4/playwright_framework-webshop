@@ -56,5 +56,30 @@ async verifyResultsContainKeyword(keyword: string) {
         expect(currentUrl).toContain("/search");
     }
 
+    async verifyNoResultsFoundMessage() {
+    this.logger.info("Verifying that the interface indicates zero product matches.");
+
+    // 1. Regex capturing common empty search notification strings
+    const noResultsRegex = /no results|0 results|did not match|no matches|empty/i;
+    
+    // 2. Scan the page text nodes natively
+    const messageLocator = this.page.getByText(noResultsRegex).first();
+    
+    try {
+        await messageLocator.waitFor({ state: "visible", timeout: 5000 });
+        await expect(messageLocator).toBeVisible();
+        
+        const capturedText = await messageLocator.innerText();
+        this.logger.success(`Empty result verification confirmed with text: "${capturedText.trim()}"`);
+    } catch (error) {
+        // Fallback: If no explicit text matched, ensure standard product grid elements contain 0 items
+        const productGridItems = this.page.locator('.product-grid .product-card, .grid-item, #search-results li');
+        const itemCount = await productGridItems.count();
+        
+        expect(itemCount).toBe(0);
+        this.logger.success("Empty result verification confirmed: Product item count is exactly 0.");
+    }
+}
+
     
 }

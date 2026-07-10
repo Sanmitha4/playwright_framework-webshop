@@ -15,3 +15,8 @@ Then('The search results should include a product containing {string}', async fu
     fixture.subStepLogger.info('Scanning display cards for expected product criteria.');
     await fixture.pages.sauceSearchPage.verifyResultsContainKeyword(productName);
 });
+
+Then('The search results page should display no results found', async function () {
+    fixture.subStepLogger.info('Scanning search response layout for empty dataset warnings.');
+    await fixture.pages.sauceSearchPage.verifyNoResultsFoundMessage();
+});
