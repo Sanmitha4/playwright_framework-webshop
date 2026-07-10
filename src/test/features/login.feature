@@ -16,11 +16,11 @@ Feature: User Login Authentication
 
 @Key:Login_03 @regression @sauce @negative 
   Scenario:Login fails with empty credentials
-    Given User navigates to the Sauce Demo Login page
+    Given User navigates to the Sauce Demo login page
     When User attempts to login with credentials from test data
-    Then an error message should be displayed on the login page
+    Then An error message should be displayed on the login page
 
 
-    
+
 
 
