@@ -1,1 +1,2 @@
-Key|Env|username|password|firstName|lastName|email|message
+Key|Env|ProductName|ExpectedStatus|Username|Password
+Search_01|STG||||
