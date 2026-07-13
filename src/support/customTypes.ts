@@ -6,3 +6,9 @@ defineParameterType({
   regexp: /"([^"]+?)"/,
   transformer: (input: string) => input.replace(/^\[|\]$/g, '').split(',').map(item => item.trim())
 });
+
+
+
+
+
+
