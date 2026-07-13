@@ -1,1 +1,3 @@
-Key|Env|username|password|firstName|lastName|email|message
+Key|Env|ProductName|ExpectedStatus|Username|Password
+Product_01|STG||||
+Product_04|STG||||
