@@ -98,16 +98,30 @@ export default class SauceProductPage {
 }
 
     async verifyProductIsSoldOut() {
-        this.logger.info("Checking page layout for explicit 'Sold out' labels.");
-        
-        const soldOutIndicator = this.page.locator(
-            `${this.Elements.soldOutBadge}, ${this.Elements.addToCartButton}:has-text("Sold out")`
-        ).first();
-        
-        await soldOutIndicator.waitFor({ state: "visible", timeout: 5000 });
-        await expect(soldOutIndicator).toBeVisible();
-        this.logger.success("Confirmed: Product interface displays out-of-stock messaging.");
+    this.logger.info("Checking page layout for explicit 'Sold out' labels.");
+    
+    // 1. Target the button element or standard overlay elements
+    const buttonSelector = this.page.locator("button[type='submit'][name='add'], #AddToCart, .btn--add-to-cart");
+    const structuralBadge = this.page.locator(".badge--sold-out, .sold-out-text, .sold-out");
+    
+    // 2. Use Playwright's native text filter capabilities to find "Sold out" text elements safely
+    const textLocator = this.page.locator("span, div, button, p").filter({ hasText: /^sold out$/i }).first();
+    
+    // Create an aggregate locator block that handles either structural selectors or explicit text matches
+    const soldOutIndicator = this.page.locator(`${this.Elements.soldOutBadge}, button:has-text("Sold out")`).first();
+    
+    try {
+        // Fallback checks using standard visible text nodes if the class combinations fail
+        await textLocator.waitFor({ state: "visible", timeout: 5000 });
+        await expect(textLocator).toBeVisible();
+        this.logger.success("Confirmed: Product interface displays out-of-stock text elements.");
+    } catch (error) {
+        // Fallback to checking the main button text properties directly
+        const btnText = await buttonSelector.first().innerText();
+        expect(btnText.toLowerCase()).toContain("sold out");
+        this.logger.success(`Confirmed via buying element transformed text label: "${btnText}"`);
     }
+}
 
     async verifyAddToCartIsDisabled() {
         this.logger.info("Evaluating 'Add to Cart' button interaction states.");
